@@ -28,7 +28,7 @@ Run the script from same directory where `llama-cli` is stored or build
 ### Command-Line Arguments
 
 - `-m, --models`: List of model file paths (required).
-- `-b, --batches`: List of batch sizes (default: `512`).
+- `-b, --batches`: List of batch sizes (default: `2048`).
 - `-c, --contexts`: List of context lengths (default: `4096`).
 - `-t, --threads`: Number of threads to use (default: `4`, choices: `1, 2, 3, 4`).
 - `-p, --prompt`: Prompt to use for benchmarking (required).
