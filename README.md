@@ -1,6 +1,6 @@
 # Llama.cpp Benchmarking Script on Astra 
 
-This Python script benchmarks [llama.cpp](https://github.com/ggerganov/llama.cpp) models on Astra Machina.
+This Python script allows you to benchmark any [llama.cpp](https://github.com/ggerganov/llama.cpp) models on Synaptics Astra Machina Board.
 
 You can benchmark any Large Language model using  [llama.cpp](https://github.com/ggerganov/llama.cpp) with different configurations of batch sizes, context lengths and thread counts. It collects Prompt Eval Time and Eval Time to a CSV file and displays them in the terminal.
 
