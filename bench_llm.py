@@ -6,7 +6,7 @@ from pathlib import Path
 import time
 
 output_csv = "benchmark_results.csv"
-command_template = "./bin/llama-cli -m {model_path} -p \"{prompt}\" -c {context} -b {batch} -t {threads}"
+command_template = "./llama-cli -m {model_path} -p \"{prompt}\" -c {context} -b {batch} -t {threads}"
 base_timeout = 300  # Base timeout for each benchmark in seconds
 
 # Validate arguments
@@ -58,9 +58,9 @@ def run_benchmark(model_path, batch, context, threads, prompt):
         prompt_eval_time = "N/A"
         for line in stderr.splitlines():
             if "eval time" in line and "tokens per second" in line:
-                tokens_per_second = line.split(",")[-1].strip().split()[0] + " tokens per second"
+                tokens_per_second = line.split(",")[-1].strip().split()[0] + " t/s"
             if "prompt eval time" in line and "tokens per second" in line:
-                prompt_eval_time = line.split(",")[-1].strip().split()[0] + " tokens per second"
+                prompt_eval_time = line.split(",")[-1].strip().split()[0] + " t/s"
 
         # Extract output text from stdout
         output_text = "N/A"
@@ -117,10 +117,10 @@ def main():
 
     # Print results to terminal without the Output column
     print(f"\nBenchmark Results:\n")
-    print(f"{'Model':<30} {'Context Size':<15} {'Batch Size':<15} {'Threads':<10}{'Prompt Eval Time':<20} {'Evaluation Time':<20} ")
-    print("-" * 160)
+    print(f"{'Model':<40} {'Context Size':<15} {'Batch Size':<15} {'Threads':<10}{'Prompt Eval Time':<20} {'Evaluation Time':<20} ")
+    print("=" * 125)
     for row in results:
-        print(f"{row['Model']:<30} {row['Context Size']:<15} {row['Batch Size']:<15} {row['Threads']:<10}  {row['Prompt Eval Time']:<20} {row['Evaluation Time']:<20}")
+        print(f"{row['Model']:<40} {row['Context Size']:<15} {row['Batch Size']:<15} {row['Threads']:<10} {row['Prompt Eval Time']:<20} {row['Evaluation Time']:<20}")
 
 if __name__ == "__main__":
     main()
