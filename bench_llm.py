@@ -9,6 +9,27 @@ output_csv = "benchmark_results.csv"
 command_template = "./bin/llama-cli -m {model_path} -p \"{prompt}\" -c {context} -b {batch} -t {threads}"
 base_timeout = 300  # Base timeout for each benchmark in seconds
 
+# Validate arguments
+def validate_arguments(args):
+    # Validate model paths
+    for model_path in args.models:
+        if not Path(model_path).is_file():
+            raise ValueError(f"Model file not found: {model_path}")
+
+    # Validate context lengths
+    for context in args.contexts:
+        if context <= 0:
+            raise ValueError(f"Invalid context length: {context}. Must be a positive integer.")
+
+    # Validate batch sizes
+    for batch in args.batches:
+        if batch <= 0:
+            raise ValueError(f"Invalid batch size: {batch}. Must be a positive integer.")
+
+    # Validate prompt
+    if not args.prompt.strip():
+        raise ValueError("Prompt cannot be empty.")
+
 # Run benchmark with resource monitoring
 def run_benchmark(model_path, batch, context, threads, prompt):
     command = command_template.format(model_path=model_path, batch=batch, context=context, threads=threads, prompt=prompt)
@@ -58,11 +79,17 @@ def run_benchmark(model_path, batch, context, threads, prompt):
 def main():
     parser = argparse.ArgumentParser(description="Benchmark llama.cpp models with different batch sizes, context lengths, and thread counts.")
     parser.add_argument("-m", "--models", nargs="+", required=True, help="List of model file paths.")
-    parser.add_argument("-b", "--batches", nargs="+", type=int, help="List of batch sizes (default: 512).", default=[512])
+    parser.add_argument("-b", "--batches", nargs="+", type=int, help="List of batch sizes (default: 2048).", default=[2048])
     parser.add_argument("-c", "--contexts", nargs="+", type=int, help="List of context lengths (default: 4096).", default=[4096])
     parser.add_argument("-t", "--threads", nargs="+", type=int, help="Number of threads to use (default: 4).", default=[4], choices=[1, 2, 3, 4])
     parser.add_argument("-p", "--prompt", type=str, required=True, help="Prompt to use for benchmarking.")
     args = parser.parse_args()
+
+    try:
+        validate_arguments(args)
+    except ValueError as e:
+        print(f"Error: {e}")
+        return
 
     results = []
 
